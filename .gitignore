@@ -1,0 +1,14 @@
+# Virtual environment (managed locally by uv)
+.venv/
+__pycache__/
+*.pyc
+
+# IDE specific files
+.idea/
+
+# Output plots, data exports, or logs generated during experiments
+outputs/
+*.png
+*.csv
+
+*.egg-info/
