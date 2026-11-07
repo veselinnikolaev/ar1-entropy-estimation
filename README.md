@@ -1,5 +1,7 @@
 # Observation Frequency and Entropy Estimation for a Gaussian AR(1) Process
 
+[![tests](https://github.com/veselinnikolaev/ar1-entropy-estimation/actions/workflows/tests.yml/badge.svg)](https://github.com/veselinnikolaev/ar1-entropy-estimation/actions/workflows/tests.yml)
+
 BSP3, University of Luxembourg. Studies how thinning (recording every k-th value)
 affects k-NN entropy estimation for a stationary Gaussian AR(1) process with known
 marginal entropy h(X) = 0.5 ln(2*pi*e*sigma^2).
@@ -13,7 +15,7 @@ marginal entropy h(X) = 0.5 ln(2*pi*e*sigma^2).
 - `src/plots.py`: figures from result CSVs
 - `experiments/run_simulation.py`: command-line entry point
 - `tests/`: estimator and generator validation
-- `results/`: CSV outputs; `figures/`: generated plots
+- `results/`: CSV outputs; each results CSV has a matching metadata JSON with the same stem; `figures/`: generated plots
 
 ## Setup
 ```bash
@@ -39,3 +41,7 @@ uv run python -m src.plots --pattern "results/full_kl_k4_seed0.csv"
 - Initial pipeline: generator, theory, KL estimator, tests (5 passing)
 - Experiment runner, estimator registry, `--estimator/--k_nn/--seed` options
 - Plots with 95% CI on bias
+- Run metadata JSON saved next to each results CSV
+- Property, reproducibility and phi=0 control tests
+- MIT license and `CITATION.cff`
+- ruff lint and format checks in CI
