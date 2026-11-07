@@ -3,6 +3,10 @@
 __pycache__/
 *.pyc
 
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+
 # IDE specific files
 .idea/
 
@@ -10,5 +14,6 @@ __pycache__/
 outputs/
 *.png
 *.csv
+results/*.json
 
 *.egg-info/

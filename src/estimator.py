@@ -1,9 +1,10 @@
 """Entropy Estimator Module with Abstract Interface for Future-Proofing."""
 
 from abc import ABC, abstractmethod
+
 import numpy as np
-from scipy.special import digamma
 from scipy.spatial import cKDTree
+from scipy.special import digamma
 
 from src.theory import theoretical_marginal_entropy
 
@@ -38,7 +39,9 @@ class KozachenkoLeonenkoEstimator(BaseEntropyEstimator):
         pts = y[:, None]
         rho = cKDTree(pts).query(pts, k=self.k_nn + 1)[0][:, -1]
         rho = np.maximum(rho, 1e-12)
-        return float(digamma(n) - digamma(self.k_nn) + np.log(2.0) + np.mean(np.log(rho)))
+        return float(
+            digamma(n) - digamma(self.k_nn) + np.log(2.0) + np.mean(np.log(rho))
+        )
 
 
 # Register new estimators here

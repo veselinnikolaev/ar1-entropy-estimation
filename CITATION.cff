@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Observation Frequency and Entropy Estimation for a Gaussian AR(1) Process"
+authors:
+  - given-names: Veselin
+    family-names: Nikolaev
+version: 0.1.0
+date-released: 2026-11-07

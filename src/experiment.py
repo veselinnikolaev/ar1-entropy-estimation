@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 from src.generator import generate_ar1_process, thin_series
 
 
@@ -15,9 +16,21 @@ def one_cell(design, phi, k, size, R, sigma, est, rng):
     rows = []
     for kind, v in (("ar1", ar), ("iid", iid)):
         e = v - h
-        rows.append(dict(estimator=est.name, design=design, phi=phi, k=k, L=L,
-                         n_ret=len(y), kind=kind, R=R, bias=e.mean(),
-                         rmse=np.sqrt((e**2).mean()), std=e.std(ddof=1)))
+        rows.append(
+            {
+                "estimator": est.name,
+                "design": design,
+                "phi": phi,
+                "k": k,
+                "L": L,
+                "n_ret": len(y),
+                "kind": kind,
+                "R": R,
+                "bias": e.mean(),
+                "rmse": np.sqrt((e**2).mean()),
+                "std": e.std(ddof=1),
+            }
+        )
     return rows
 
 

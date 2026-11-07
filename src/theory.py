@@ -11,10 +11,11 @@ def theoretical_marginal_entropy(sigma: float) -> float:
     return 0.5 * np.log(2.0 * np.pi * np.e * (sigma**2))
 
 
-def integrated_autocorrelation_time(phi1: int, k: int = 1) -> float:
+def integrated_autocorrelation_time(phi1: float, k: int = 1) -> float:
     """Computes tau_int for thinned series with step k [Notes Part E, Eq 27]."""
     phi_k = phi1**k
     return (1.0 + phi_k) / (1.0 - phi_k)
 
-def entropy_rate(sigma, phi1):
+
+def entropy_rate(sigma: float, phi1: float) -> float:
     return 0.5 * np.log(2 * np.pi * np.e * sigma**2 * (1 - phi1**2))

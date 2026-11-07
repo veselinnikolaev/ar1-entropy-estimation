@@ -1,10 +1,15 @@
 import argparse
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-METRICS = [("bias", "Bias (est - true)"), ("rmse", "RMSE"), ("std", "Std across trajectories")]
+METRICS = [
+    ("bias", "Bias (est - true)"),
+    ("rmse", "RMSE"),
+    ("std", "Std across trajectories"),
+]
 
 
 def plot_design(df, design, estimator, outdir):
@@ -15,7 +20,9 @@ def plot_design(df, design, estimator, outdir):
             g = g.sort_values("k")
             if col == "bias":
                 se = 1.96 * g["std"] / np.sqrt(g["R"])  # 95% CI of the mean error
-                ax.errorbar(g.k, g[col], yerr=se, marker="o", capsize=2, label=f"phi={phi}")
+                ax.errorbar(
+                    g.k, g[col], yerr=se, marker="o", capsize=2, label=f"phi={phi}"
+                )
             else:
                 ax.plot(g.k, g[col], marker="o", label=f"phi={phi}")
         # iid control does not depend on phi, so average over phi
