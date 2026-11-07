@@ -1,46 +1,30 @@
-"""Run script for AR(1) entropy estimation simulation.
-
-Executes the workflow using modules from src/
-"""
-
-from src.estimator import KozachenkoLeonenkoEstimator
-from src.generator import generate_ar1_process, thin_series
-from src.theory import theoretical_marginal_entropy
+import argparse
+from pathlib import Path
+from src.estimator import ESTIMATORS
+from src.experiment import run_grid
 
 
 def main():
-    print("Starting AR(1) Entropy Estimation Simulation...")
-    N = 5000
-    phi1 = 0.95
-    sigma = 1.0
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--quick", action="store_true")
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--estimator", default="kl", choices=list(ESTIMATORS))
+    ap.add_argument("--k_nn", type=int, default=4)
+    a = ap.parse_args()
 
-    # 1. Generate AR(1) process
-    series = generate_ar1_process(n_samples=N, phi1=phi1, sigma=sigma, seed=42)
-    print(f"Generated AR(1) series of length {len(series)} with phi1={phi1}")
+    if a.quick:
+        phis, ks, sizes, R, name = [0.0, 0.9], [1, 5], {"fixed_n": 200, "fixed_L": 1000}, 20, "quick"
+    else:
+        phis, ks = [0.0, 0.5, 0.9, 0.99], [1, 2, 5, 10, 20, 50]
+        sizes, R, name = {"fixed_n": 1000, "fixed_L": 20000}, 500, "full"
 
-    # 2. Thin series (e.g., k=5)
-    k = 5
-    thinned = thin_series(series, k=k)
-    print(
-        f"Thinned series with step k={k}: length {len(thinned)} (Expected ~{N // k})"
-    )
-
-    # 3. Initialize Estimator
-    estimator = KozachenkoLeonenkoEstimator(k_nn=3)
-
-    # 4. Compute Results
-    true_h = theoretical_marginal_entropy(sigma)
-    est_h_full = estimator.estimate(series)
-    est_h_thinned = estimator.estimate(thinned)
-
-    print("\n--- Results Summary ---")
-    print(f"True Marginal Entropy h(X):          {true_h:.4f}")
-    print(
-        f"Estimated k-NN Entropy (Full N={N}):   {est_h_full:.4f} (Error: {abs(true_h - est_h_full):.4f})"
-    )
-    print(
-        f"Estimated k-NN Entropy (Thinned N={len(thinned)}): {est_h_thinned:.4f} (Error: {abs(true_h - est_h_thinned):.4f})"
-    )
+    est = ESTIMATORS[a.estimator](k_nn=a.k_nn)
+    df = run_grid(est, ["fixed_n", "fixed_L"], phis, ks, sizes, R=R, seed=a.seed)
+    Path("results").mkdir(exist_ok=True)
+    out = f"results/{name}_{est.name}_k{a.k_nn}_seed{a.seed}.csv"
+    df.to_csv(out, index=False)
+    print(df.round(4).to_string())
+    print("saved", out)
 
 
 if __name__ == "__main__":
