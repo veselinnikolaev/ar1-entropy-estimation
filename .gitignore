@@ -10,10 +10,9 @@ __pycache__/
 # IDE specific files
 .idea/
 
-# Output plots, data exports, or logs generated during experiments
-outputs/
-*.png
-*.csv
-results/*.json
-
+# Packaging
 *.egg-info/
+
+# Throwaway experiment output (smoke tests)
+results/quick_*
+outputs/
